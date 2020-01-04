@@ -3,15 +3,15 @@
         <el-button type="primary" @click="toAddHandler">添加</el-button>
         <el-button type="danger">批量删除</el-button>
 
-    <el-table :data="orders">
+    <el-table :data="orders.list">
         <el-table-column prop="id" label="编号"></el-table-column>
-        <el-table-column prop="orderTime" label="订单接收时间"></el-table-column>
-        <el-table-column prop="total" label="订单总数"></el-table-column>
-        <el-table-column prop="status" label="已完成"></el-table-column>
+        <el-table-column prop="orderTime" label="下单时间"></el-table-column>
+        <el-table-column prop="total" label="总价"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
-        <el-table-column prop="customerId" label="顾客信息"></el-table-column>
-        <el-table-column prop="waiterId" label="员工信息"></el-table-column>
-        <el-table-column prop="addressId" label="地址"></el-table-column> 
+        <el-table-column prop="customerId" label="顾客Id"></el-table-column>
+        <el-table-column prop="waiterId" label="员工Id"></el-table-column>
+        <el-table-column prop="addressId" label="地址Id"></el-table-column> 
         <el-table-column label="操作">
             <template v-slot="slot">
                 <a href="" @click.prevent="toDeleteHandler(slot.row.id)" >删除</a>
@@ -20,7 +20,7 @@
         </el-table-column>   
     </el-table>
         <!-- 分页 -->
-        <el-pagination layout="prev, pager, next" :total="50">
+        <el-pagination layout="prev, pager, next" :total="orders.total" @current-change="pageChageHandler">
         </el-pagination>
         <!-- 分页结束 -->
 
@@ -29,14 +29,11 @@
         :title.sync="title" 
         :visible.sync="visible" width="60%"> 
         <el-form :model="form" label-width="80px">
-        <el-form-item label="订单接收时间">
+        <el-form-item label="下单时间">
           <el-input v-model="form.orderTime"></el-input>
         </el-form-item>
-        <el-form-item label="订单总数">
+        <el-form-item label="总价">
           <el-input v-model="form.total"></el-input>
-        </el-form-item>
-        <el-form-item label="已完成">
-          <el-input v-model="form.status"></el-input>
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.remark"></el-input>
@@ -68,12 +65,21 @@ import querystring from 'querystring'
 export default {
     data(){
         return{
-        form:{},
-        orders:[],
-        visible:false
+        form:{type:"order"},
+        orders:{},
+        visible:false,
+        params:{
+            page:0,
+            pageSize:10
+        }
         }  
     },
     methods:{
+        pageChageHandler(page){
+            this.params.page = page -1;
+            this.loaddate();
+
+        },
         closeModalHandler(){
         this.visible=false;
         },
@@ -105,7 +111,7 @@ export default {
 
         },
         submitHandler(){
-            let url="http://localhost:6677/order/saveOrUpdate"
+            let url="http://localhost:6677/order/save"
             request({
                 url,
                 method:"post",
@@ -121,9 +127,17 @@ export default {
             })          
         },
         loaddate(){
-            let url="http://localhost:6677/order/findAll"
-            request.get(url).then((response)=>{
-                this.orders = response.data
+            let url="http://localhost:6677/order/queryPage"
+            request({
+                url,
+                method:"post",
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+                data:querystring.stringify(this.params)
+            }).then((response)=>{   
+            // orders为一个对象，其中包含了分页信息，以及列表信息
+                this.orders = response.data;
             })
         },
         toAddHandler(){

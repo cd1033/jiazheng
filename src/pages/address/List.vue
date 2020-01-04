@@ -10,7 +10,7 @@
     <el-table-column prop="area" label="地区"></el-table-column>  
     <el-table-column prop="address" label="地址"></el-table-column>  
     <el-table-column prop="telephone" label="联系方式"></el-table-column>  
-    <el-table-column prop="customerId" label="顾客编号"></el-table-column>    
+ 
     <el-table-column  label="操作">
     <template v-slot="slot">
         <a href="" @click.prevent="toDeleteHandler(slot.row.id)">删除</a>
@@ -40,6 +40,13 @@
     <el-form-item label="手机号">
       <el-input  v-model="form.telephone"></el-input>
     </el-form-item>
+    <el-form-item label="城市">
+      <el-input  v-model="form.city"></el-input>
+    </el-form-item>
+    <el-form-item label="地区">
+      <el-input  v-model="form.area"></el-input>
+    </el-form-item>
+    
   </el-form>
   <span slot="footer" class="dialog-footer">
     <el-button size="small" @click="closeModalHandler">取 消</el-button>

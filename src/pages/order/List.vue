@@ -105,7 +105,7 @@ export default {
 
         },
         submitHandler(){
-            let url="http://localhost:6677/order/saveOrUpdate"
+            let url="http://localhost:6677/order/save"
             request({
                 url,
                 method:"post",

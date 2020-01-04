@@ -37,8 +37,18 @@
           <el-input   v-model="form.price"></el-input>
       </el-form-item>
       <el-form-item label="描述">
-          <el-input   v-model="form.description"></el-input>
+          <el-input  type="textarea" v-model="form.description"></el-input>
       </el-form-item>
+      <el-form-item label="所属栏目">
+             <el-select v-model="form.categoryId">
+                <el-option 
+                     v-for="item in options" 
+                     :key="item.id"
+                     :label="item.name"
+                     :value="item.id">
+                </el-option>
+             </el-select>
+        </el-form-item>
       <el-form-item label="操作">
           <el-input   v-model="form.status"></el-input>
       </el-form-item>
@@ -58,6 +68,13 @@ import querystring from 'querystring'
 export default {
     //用于存放网页中需要的方法
     methods:{
+         loadCategory(){
+       let url = "http://localhost:6677/category/findAll"
+       request.get(url).then((response)=>{
+         // 将查询结果设置到products中，this指向外部函数的this
+         this.options = response.data;
+       })
+     },
         toAddHandler(){
             this.form={
                 type:"customer"
@@ -121,15 +138,16 @@ export default {
         return{
             visible:false,
             products:[],
-            form:{
-                type:"product"
-            }
+            form:{ },
+            options:[]
+
         }
     },
     created(){
         //this为当前vue实例
         //vue实例创建完毕
     this.loadData();
+    this.loadCategory();
     }
 }
 </script>

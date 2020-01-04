@@ -3,7 +3,7 @@
     <el-button type="success" size="small" @click="toAddHandler">添加</el-button>
     <el-button type="danger" size="small">批量删除</el-button>  
 
-    <el-table :data="customers">
+    <el-table :data="comment">
     <el-table-column prop="id" label="编号"></el-table-column>
     <el-table-column prop="content" label="内容"></el-table-column>    
     <el-table-column prop="commentTime" label="评论时间"></el-table-column>    
@@ -48,10 +48,10 @@ export default {
     //用于存放网页中需要调用的方法
     methods:{
         loadData(){
-          let url="http://localhost:6677/customer/findAll"
+          let url="http://localhost:6677/comment/findAll"
       request.get(url).then((response)=>{
       //将直接查询结果设置到customers中
-      this.customers = response.data
+      this.comment = response.data
       });
         },
         toDeleteHandler(id)
@@ -62,7 +62,7 @@ export default {
           type: 'warning'
         }).then(() => {
           //调用后台接口完成删除操作
-          let url="http://localhost:6677/customer/deleteById?id="+id;
+          let url="http://localhost:6677/comment/deleteById?id="+id;
           request.get(url).then((response)=>{
             //刷新数据
             this.loadData();
@@ -91,13 +91,13 @@ export default {
             this.visible=true;
             //将form变为初始值
             this.form={
-              type:"customer"
+              type:"comment"
 
             }
         },
         submitHandler(){
           //通过request对表单的数据进行存储
-          let url="http://localhost:6677/customer/saveOrUpdate"
+          let url="http://localhost:6677/comment/saveOrUpdate"
           request({
             url,
             method:"POST",
@@ -121,9 +121,9 @@ export default {
     data(){
         return {
             visible:false,
-            customers:[],
+            comment:[],
             form:{
-              type:"customer"
+              type:"comment"
             }
     }
 },

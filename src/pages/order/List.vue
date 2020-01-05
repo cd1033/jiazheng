@@ -126,7 +126,7 @@ export default {
                 this.$message({type:"success",message:response.message})
             })          
         },
-        loaddate(){
+        loaddata(){
             let url="http://localhost:6677/order/queryPage"
             request({
                 url,
@@ -150,7 +150,7 @@ export default {
 
     },
     created(){
-        this.loaddate();
+        this.loaddata();
     }
 }
 </script>

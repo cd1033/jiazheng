@@ -77,7 +77,7 @@ export default {
     methods:{
         pageChageHandler(page){
             this.params.page = page -1;
-            this.loaddate();
+            this.loaddata();
 
         },
         closeModalHandler(){

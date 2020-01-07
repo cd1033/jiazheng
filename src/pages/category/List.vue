@@ -4,10 +4,14 @@
         <el-button size="small" type="danger">删除</el-button>
         <el-table :data="categorys">
             <el-table-column prop="id" label="编号"></el-table-column>
-            <el-table-column prop="name" label="项目名称"></el-table-column>
-            <el-table-column prop="num" label="价格"></el-table-column>
-            <el-table-column width="200px" prop="icon" label="图片"></el-table-column>
-            <el-table-column prop="parentId" label="所属产品"></el-table-column>
+            <el-table-column prop="name" label="栏目名称"></el-table-column>
+            <el-table-column prop="num" label="序号"></el-table-column>
+            <el-table-column label="图片">
+                <template slot-scope="scope">
+          <img :src="scope.row.icon" width="50" height="50">
+        </template>
+            </el-table-column>
+            <el-table-column prop="parentId" label="父栏目"></el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template v-slot="slot">
                         <a href="" @click.prevent="toDeleteHandeler(slot.row.id)">删除</a>

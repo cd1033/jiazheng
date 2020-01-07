@@ -7,7 +7,11 @@
             <el-table-column prop="name" label="产品名称"></el-table-column>
             <el-table-column prop="description" label="描述"></el-table-column>
             <el-table-column prop="price" label="价格"></el-table-column>
-            <el-table-column prop="status" label="操作"></el-table-column>
+            <el-table-column label="图片">
+                <template slot-scope="scope">
+          <img :src="scope.row.photo" width="200" height="200">
+        </template>
+            </el-table-column>
             <el-table-column prop="categoryId" label="栏目编号"></el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template v-slot="slot">
@@ -49,8 +53,15 @@
                 </el-option>
              </el-select>
         </el-form-item>
-      <el-form-item label="操作">
-          <el-input   v-model="form.status"></el-input>
+      <el-form-item label="图片">
+                            <el-upload
+                        class="upload-demo"
+                        action="http://134.175.154.93:6677/file/upload"
+                        :file-list="fileList"
+                        :on-success="uploadSuccessHandler">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                            </el-upload>
       </el-form-item>
   </el-form>
 
@@ -68,7 +79,11 @@ import querystring from 'querystring'
 export default {
     //用于存放网页中需要的方法
     methods:{
-         loadCategory(){
+        uploadSuccessHandler(response){
+            let photo = "http://134.175.154.93:8888/group1/"+response.data.id
+            this.form.photo = photo;
+        },
+        loadCategory(){
        let url = "http://localhost:6677/category/findAll"
        request.get(url).then((response)=>{
          // 将查询结果设置到products中，this指向外部函数的this
